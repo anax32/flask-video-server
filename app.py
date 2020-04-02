@@ -13,6 +13,7 @@ logger = logging.getLogger()
 # 10Mb buffer
 BUFF_SIZE=10*(1 << 20)
 VIDEO_PATH=environ.get("VIDEO_PATH", getcwd())
+TITLE=environ.get("VIDEO_TITLE", getcwd())
 
 app = Flask(__name__)
 
@@ -27,14 +28,17 @@ def index():
 
   # FIXME: get subdirs?
   # FIXME: filter by file type
-  files = [f for f in listdir(VIDEO_PATH) if isfile(join(VIDEO_PATH, f))]
+  data = {
+    "title": TITLE,
+    "files": [f for f in listdir(VIDEO_PATH) if isfile(join(VIDEO_PATH, f))]
+  }
 
-  logger.info("found %i files" % len(files))
+  logger.info("found %i files" % len(data["files"]))
 
-  for file in files:
+  for file in data["files"]:
     logger.debug("file: '%s'" % str(file))
 
-  return render_template("index.html", files=files)
+  return render_template("index.html", data=data)
 
 
 def get_data(file_path, data_start, data_length=BUFF_SIZE):
@@ -92,7 +96,7 @@ def get_file(filename):
 
 if __name__ == "__main__":
   logging.basicConfig(level=logging.INFO)
-  app.run(host="127.0.0.1",
+  app.run(host="0.0.0.0",
           port=8080,
           debug=True,
           threaded=True)
