@@ -1,0 +1,28 @@
+#!/bin/bash -ux
+
+# ======================
+#  list files matching a pattern
+#  output the names to a json doc with format:
+#   '{"filename": "<path>", "thumbnail": "<path>", "id": "<md5>"}'
+#
+# FILE_TYPES is a comma separated list of file types of interest
+#   e.g. FILE_TYPES=mp4,avi,wmv,mpeg
+#
+# DATA_PATH is the directory to search
+# ======================
+
+# create the find pattern
+FIND_PATTERN=$(echo ${FILE_TYPES} \
+                 | sed -e 's/,/ -o -name \*./g' \
+                 | sed -e 's/^/-name \*./')
+
+# run the find command, compute the md5 of the filename and concat with filename
+# jq the output into a json doc
+# concatenate all the json docs into one big array
+# FIXME: this fails when the filename contains backticks, certain brackets etc, I don't care anymore.
+# TODO: reimplement this functionality in python
+find ${DATA_PATH} \
+  \( ${FIND_PATTERN} \) \
+  -exec sh -c "echo '{}' | md5sum | head -c 32 ; echo ' {}'" \; \
+  | jq -R  '{"filename": .[33:], "thumbnail": "", "id": .[:32]}' \
+  | jq -s .

@@ -1,0 +1,15 @@
+#!/bin/bash -u
+
+#
+# get a list of unique file-types in VIDEO_PATH
+#
+# requires:
+#   VIDEO_PATH environment variable, path to search for types
+#
+
+find ${VIDEO_PATH} -type f \
+  | rev \
+  | cut -d'.' -f1 \
+  | rev \
+  | sort \
+  | uniq
