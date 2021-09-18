@@ -11,7 +11,7 @@ from os.path import join, isfile
 logger = logging.getLogger()
 
 # 10Mb buffer
-BUFF_SIZE=10*(1 << 20)
+BUFF_SIZE=10*(1 << int(environ.get("BUFFER_SIZE_MULTIPLIER", 10)))
 VIDEO_PATH=environ.get("VIDEO_PATH", getcwd())
 TITLE=environ.get("VIDEO_TITLE", getcwd())
 
@@ -96,7 +96,4 @@ def get_file(filename):
 
 if __name__ == "__main__":
   logging.basicConfig(level=logging.INFO)
-  app.run(host="0.0.0.0",
-          port=8080,
-          debug=True,
-          threaded=True)
+  app.run()
