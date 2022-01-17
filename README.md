@@ -9,9 +9,9 @@ Set:
 ## Usage
 
 Example:
-
+```
     VIDEO_PATH=/home/root/downloads python app.py
-
+```
 point your browser at http://127.0.0.1:8080
 
 click some links
@@ -23,10 +23,10 @@ watch your videos
 Mount your video folder to the `/data` in the container.
 
 Example:
-
+```
     docker build -t videoserver
-    docker run --rm -p 80:8080 -v $(pwd)/video-data/:/data --name vidsrv videoserver
-
+    docker run --rm -p 80:5000 -v $(pwd)/video-data/:/data --name vidsrv videoserver
+```
 
 point your browser at http://127.0.0.1
 

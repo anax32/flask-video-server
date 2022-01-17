@@ -8,8 +8,25 @@
 <body>
     <ul>
         {% for file in data.files %}
-        <li><a href="/video{{ urlFilePath }}/{{ file }}">{{ file }}</a></li>
+          {% if data.group is not none %}
+        <li><a href="/video/{{ data.group }}/{{ file }}">{{ file }}</a></li>
+          {% else %}
+        <li><a href="/video/{{ file }}">{{ file }}</a></li>
+          {% endif %}
         {% endfor %}
     </ul>
+
+    {% if data.paths|length %}
+    <h1>Paths</h1>
+    <ul>
+        {% for path in data.paths %}
+          {% if data.group is not none %}
+        <li><a href="/group/{{ data.group }}/{{ path }}">{{ path }}</a></li>
+          {% else %}
+        <li><a href="/group/{{ path }}">{{ path }}</a></li>
+          {% endif %}
+        {% endfor %}
+    </ul>
+    {% endif %}
 </body>
 </html>
